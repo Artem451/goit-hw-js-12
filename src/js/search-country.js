@@ -12,7 +12,7 @@ const refs = {
     lableEl: document.querySelector('.country-lable'),
     inputEl: document.getElementById('country-input'),
 }
-console.log(refs.inputEl)
+
 refs.inputEl.addEventListener ('input', debounce(onSerch, 1000))
 
 
@@ -20,6 +20,10 @@ function onSerch(evnt) {
     evnt.preventDefault();
     
     const countryName = evnt.target.value
+
+    if (countryName === '') {
+        refs.countryEl.innerHTML = ''
+    }
 
     fetchCountryByName (countryName)
     .then (renderCountryCard)
@@ -37,7 +41,7 @@ function fetchCountryByName (countryName) {
 }
 
 function renderCountryCard (countres) {
-    if (countres.length < 2 || countres.length <= 10){
+    if (countres.length >= 2 || countres.length <= 10){
         const markupList = countrySerchRes(countres)
         refs.countryEl.innerHTML = markupList
     }
@@ -45,7 +49,7 @@ function renderCountryCard (countres) {
         const markupCountry = countryRes(countres)
         refs.countryEl.innerHTML = markupCountry
     } 
-    else {
+    if (countres.length > 10) {
         alert({
             text: 'Too many matches found. Please enter a more specific query!'
           });
