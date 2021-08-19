@@ -28,16 +28,23 @@ function onSerch(evnt) {
     fetchCountryByName (countryName)
     .then (renderCountryCard)
     .catch (error => {
-        console.log(error)
-    })
-
+            alert({
+                text: 'Wrong name'
+            });
+        })
 }
 
 function fetchCountryByName (countryName) {
     return  fetch (`https://restcountries.eu/rest/v2/name/${countryName}`)
         .then(response => {
-            return response.json()
-        }) 
+            if(response.ok){
+               return response.json() 
+            } else {
+                return Promise.reject
+            }
+            
+        })
+        
 }
 
 function renderCountryCard (countres) {
@@ -50,6 +57,7 @@ function renderCountryCard (countres) {
         refs.countryEl.innerHTML = markupCountry
     } 
     if (countres.length > 10) {
+        refs.countryEl.innerHTML = ''
         alert({
             text: 'Too many matches found. Please enter a more specific query!'
           });
